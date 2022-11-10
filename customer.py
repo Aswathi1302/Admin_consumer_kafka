@@ -37,7 +37,16 @@ while True:
     elif(choice==3):
         print("delete customer")   
     elif(choice==4):
-        print("update customer")  
+        print("update customer") 
+        code=input("enter the customer code:")
+        name=input("enter name to be upadted:-")
+        address=input("enter address to be upadted:-")
+        phone=input("enter phone to be upadted:- ")
+        email=input("enter email to be upadted:- ")
+        sql="UPDATE `customer` SET `name`='"+name+"',`address`='"+address+"',`phone`='"+phone+"',`email`='"+email+"' WHERE `code`=" +code
+        mycursor.execute(sql)
+        mydb.commit()
+        print("Data updated successfully....") 
     elif(choice==5):
         print("view all customer")  
         try:
