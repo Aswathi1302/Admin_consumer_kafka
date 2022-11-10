@@ -16,7 +16,9 @@ while True:
     print("4.upadte customer")
     print("5. view all customer")
     print("6. Generate bill")
-    print("7.exit")
+    print("7. view all bills")
+    print("8.top two high bill")
+    print("9.exit")
 
     print("--------------------------------")
     choice=int(input("enter your choice:-"))
@@ -131,10 +133,19 @@ while True:
         
         
 
-
-
-        break        
     elif(choice==7):
+        print("view the bill which had generated ")
+
+        sql = "SELECT c.name,c.address, b.`month`, b.`year`, b.`paidstatus`, b.`billdate`, b.`totalunit`, b.`bill` FROM `bill` b JOIN customer c ON b.userid=c.id"
+
+        mycursor.execute(sql)
+
+        result = mycursor.fetchall()
+
+        print(tabulate(result,headers=['name','address','month','year', 'paidstatus','billdate','totalunit','bill'],tablefmt = "psql"))
+
+           
+    elif(choice==9):
         break
 
                 
