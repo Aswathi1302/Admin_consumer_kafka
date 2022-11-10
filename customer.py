@@ -47,7 +47,7 @@ while True:
             for i in result:
                 print(i) 
         except mysql.connector.Error as e:
-            sys.exit("view date error") 
+            sys.exit("view data error") 
     elif(choice==6):
         break
 
