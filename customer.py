@@ -35,7 +35,15 @@ while True:
     elif(choice==2):
         print("search customer")
     elif(choice==3):
-        print("delete customer")   
+        print("delete customer") 
+        code=input("enter the customer code:")
+        try:
+            sql="DELETE FROM `customer` WHERE `code`="+code
+            mycursor.execute(sql)
+            mydb.commit()
+        except mysql.connector.Error as e:
+            sys.exit("view data error")     
+        print("Data deleted successfully..")   
     elif(choice==4):
         print("update customer") 
         code=input("enter the customer code:")
