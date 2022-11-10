@@ -120,7 +120,7 @@ while True:
         #total_bill = int(result)*5
             total_bill=int(str(result[0])) * 5
             print(total_bill)
-            sql="INSERT INTO `bill`(`userid`, `month`, `year`, `bill`, `paidstatus`, `billdate`, `totalunit`) VALUES (%s,%s,%s,%s,%s,now(),%s)"
+            sql="INSERT INTO `bill`(`userid`, `month`, `year`, `bill`, `paidstatus`, `billdate`, `totalunit`,`duedate`) VALUES (%s,%s,%s,%s,%s,now(),%s,now()+interval 14 day)"
             data = (str(a),str(month),str(year),total_bill,'0',unit)
 
             mycursor.execute(sql,data)
