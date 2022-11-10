@@ -95,38 +95,39 @@ while True:
 
     elif(choice==6):
         print("****Generate bill****")
-        code=input("enter the customer code:-")
-        sql="SELECT `id` FROM `customer` WHERE `code`='"+code+"'"
+        dates = date.today()
+        year = dates.year
+        month = dates.month
+        sql="DELETE FROM `bill` WHERE `month`='"+str(month)+"' AND `year`= '"+str(year)+"'"
+        mycursor.execute(sql)
+        mydb.commit()
+    
+        sql="SELECT `id` FROM `customer`"
         mycursor.execute(sql)
         result=mycursor.fetchall()
         for i in result:
             a=i[0]
             print(a)
-        dates = date.today()
-
-        year = dates.year
-
-        month = dates.month   
-        #month=11  
-        #year=2022  
-        sql="SELECT SUM(unit) FROM `usagetbl` WHERE `userid`='"+str(a)+"' AND MONTH(datetime)='"+str(month)+"' AND YEAR(datetime)='"+str(year)+"' "
-        mycursor.execute(sql)
-        result=mycursor.fetchone()
-        unit=(result[0])
-        print(result)
-        print("Total Unit used : ",result)
+           
+ 
+            sql="SELECT SUM(unit) FROM `usagetbl` WHERE `userid`='"+str(a)+"' AND MONTH(datetime)='"+str(month)+"' AND YEAR(datetime)='"+str(year)+"' "
+            mycursor.execute(sql)
+            result=mycursor.fetchone()
+            unit=(result[0])
+            print(result)
+            print("Total Unit used : ",result)
 
         #total_bill = int(result)*5
-        total_bill=int(str(result[0])) * 5
-        print(total_bill)
-        sql="INSERT INTO `bill`(`userid`, `month`, `year`, `bill`, `paidstatus`, `billdate`, `totalunit`) VALUES (%s,%s,%s,%s,%s,now(),%s)"
-        data = (str(a),str(month),str(year),total_bill,'0',unit)
+            total_bill=int(str(result[0])) * 5
+            print(total_bill)
+            sql="INSERT INTO `bill`(`userid`, `month`, `year`, `bill`, `paidstatus`, `billdate`, `totalunit`) VALUES (%s,%s,%s,%s,%s,now(),%s)"
+            data = (str(a),str(month),str(year),total_bill,'0',unit)
 
-        mycursor.execute(sql,data)
+            mycursor.execute(sql,data)
 
-        mydb.commit()
+            mydb.commit()
 
-        print("Bill inserted successfully.")
+            print("Bill inserted successfully.")
         
         
 
