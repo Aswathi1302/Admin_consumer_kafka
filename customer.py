@@ -34,6 +34,8 @@ while True:
             sys.exit("view date error")
     elif(choice==2):
         print("search customer")
+        print("1.search customer by name")
+        print
     elif(choice==3):
         print("delete customer") 
         code=input("enter the customer code:")
