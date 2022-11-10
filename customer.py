@@ -1,4 +1,5 @@
 import mysql.connector
+from tabulate import tabulate
 import sys
 try:
     mydb=mysql.connector.connect(host='localhost',user='root',password='',database='admindb')
@@ -34,8 +35,26 @@ while True:
             sys.exit("view date error")
     elif(choice==2):
         print("search customer")
-        print("1.search customer by name")
-        print
+        print("*********1.search customer by name")
+        print("*********2.search customer by code")
+        print("*********3.search customer by phone")
+        choice1=int(input("enter your choice"))
+        if(choice1==1):
+            print("customer details")
+            name=input("enter the name:--")
+            sql="SELECT `code`, `name`, `address`, `phone`, `email` FROM `customer` WHERE `name`='"+name+"'"
+        elif(choice1==2):
+            code=input("enter the code:--")
+            sql="SELECT `code`, `name`, `address`, `phone`, `email` FROM `customer` WHERE `code`='"+code+"'"
+        elif(choice1==3):
+            phone=input("enter the phone:--")
+            sql="SELECT `code`, `name`, `address`, `phone`, `email` FROM `customer` WHERE `phone`='"+phone+"'"   
+        mycursor.execute(sql)
+        result=mycursor.fetchall()
+        print(tabulate(result,headers=["code","name","address","phone","email"],tablefmt="psql")) 
+    
+
+        
     elif(choice==3):
         print("delete customer") 
         code=input("enter the customer code:")
@@ -53,9 +72,12 @@ while True:
         address=input("enter address to be upadted:-")
         phone=input("enter phone to be upadted:- ")
         email=input("enter email to be upadted:- ")
-        sql="UPDATE `customer` SET `name`='"+name+"',`address`='"+address+"',`phone`='"+phone+"',`email`='"+email+"' WHERE `code`=" +code
-        mycursor.execute(sql)
-        mydb.commit()
+        try:
+            sql="UPDATE `customer` SET `name`='"+name+"',`address`='"+address+"',`phone`='"+phone+"',`email`='"+email+"' WHERE `code`=" +code
+            mycursor.execute(sql)
+            mydb.commit()
+        except mysql.connector.Error as e:
+            sys.exit("view data error")     
         print("Data updated successfully....") 
     elif(choice==5):
         print("view all customer")  
@@ -64,8 +86,9 @@ while True:
             mycursor.execute(sql)
             result=mycursor.fetchall()
             for i in result:
-                print(i) 
+                print(i)   
         except mysql.connector.Error as e:
+            
             sys.exit("view data error") 
     elif(choice==6):
         break
