@@ -37,9 +37,17 @@ while True:
     elif(choice==3):
         print("delete customer")   
     elif(choice==4):
-        print("delete customer")  
+        print("update customer")  
     elif(choice==5):
-        print("delete customer")  
+        print("view all customer")  
+        try:
+            sql="SELECT `code`, `name`, `address`, `phone`, `email` FROM `customer` "
+            mycursor.execute(sql)
+            result=mycursor.fetchall()
+            for i in result:
+                print(i) 
+        except mysql.connector.Error as e:
+            sys.exit("view date error") 
     elif(choice==6):
         break
 
