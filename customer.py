@@ -16,7 +16,9 @@ while True:
     print("4.upadte customer")
     print("5. view all customer")
     print("6. Generate bill")
-    print("7.exit")
+    print("7. view all bills")
+    print("8.top two high bill")
+    print("9.exit")
 
     print("--------------------------------")
     choice=int(input("enter your choice:-"))
@@ -95,45 +97,68 @@ while True:
 
     elif(choice==6):
         print("****Generate bill****")
-        code=input("enter the customer code:-")
-        sql="SELECT `id` FROM `customer` WHERE `code`='"+code+"'"
+        dates = date.today()
+        year = dates.year
+        month = dates.month
+        sql="DELETE FROM `bill` WHERE `month`='"+str(month)+"' AND `year`= '"+str(year)+"'"
+        mycursor.execute(sql)
+        mydb.commit()
+    
+        sql="SELECT `id` FROM `customer`"
         mycursor.execute(sql)
         result=mycursor.fetchall()
         for i in result:
             a=i[0]
             print(a)
-        dates = date.today()
-
-        year = dates.year
-
-        month = dates.month   
-        #month=11  
-        #year=2022  
-        sql="SELECT SUM(unit) FROM `usagetbl` WHERE `userid`='"+str(a)+"' AND MONTH(datetime)='"+str(month)+"' AND YEAR(datetime)='"+str(year)+"' "
-        mycursor.execute(sql)
-        result=mycursor.fetchone()
-        unit=(result[0])
-        print(result)
-        print("Total Unit used : ",result)
+           
+ 
+            sql="SELECT SUM(unit) FROM `usagetbl` WHERE `userid`='"+str(a)+"' AND MONTH(datetime)='"+str(month)+"' AND YEAR(datetime)='"+str(year)+"' "
+            mycursor.execute(sql)
+            result=mycursor.fetchone()
+            unit=(result[0])
+            print(result)
+            print("Total Unit used : ",result)
 
         #total_bill = int(result)*5
-        total_bill=int(str(result[0])) * 5
-        print(total_bill)
-        sql="INSERT INTO `bill`(`userid`, `month`, `year`, `bill`, `paidstatus`, `billdate`, `totalunit`) VALUES (%s,%s,%s,%s,%s,now(),%s)"
-        data = (str(a),str(month),str(year),total_bill,'0',unit)
+            total_bill=int(str(result[0])) * 5
+            print(total_bill)
+            sql="INSERT INTO `bill`(`userid`, `month`, `year`, `bill`, `paidstatus`, `billdate`, `totalunit`,`duedate`) VALUES (%s,%s,%s,%s,%s,now(),%s,now()+interval 14 day)"
+            data = (str(a),str(month),str(year),total_bill,'0',unit)
 
-        mycursor.execute(sql,data)
+            mycursor.execute(sql,data)
 
-        mydb.commit()
+            mydb.commit()
 
-        print("Bill inserted successfully.")
+            print("Bill inserted successfully.")
         
         
 
-
-
-        break        
     elif(choice==7):
+        print("view the bill which had generated ")
+
+        sql = "SELECT c.name,c.address, b.`month`, b.`year`, b.`paidstatus`, b.`billdate`, b.`totalunit`, b.`bill` FROM `bill` b JOIN customer c ON b.userid=c.id"
+
+        mycursor.execute(sql)
+
+        result = mycursor.fetchall()
+
+        print(tabulate(result,headers=['name','address','month','year', 'paidstatus','billdate','totalunit','bill'],tablefmt = "psql"))
+    elif(choice==8):
+        print('Top 2 high bill')
+
+        sql = "SELECT * FROM `bill` ORDER BY `bill` DESC LIMIT 2"
+
+        mycursor.execute(sql)
+
+        result = mycursor.fetchall()
+
+        print(tabulate(result,headers=['id', 'User_Id', 'month', 'year', 'bill', 'paid status', 'bill date','total_unit','due_date' ]))
+
+
+        break     
+
+           
+    elif(choice==9):
         break
 
                 
