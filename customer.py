@@ -109,7 +109,7 @@ while True:
         result=mycursor.fetchall()
         for i in result:
             a=i[0]
-            print(a)
+            print(a)      
            
  
             sql="SELECT SUM(unit) FROM `usagetbl` WHERE `userid`='"+str(a)+"' AND MONTH(datetime)='"+str(month)+"' AND YEAR(datetime)='"+str(year)+"' "
